@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:loginapp/screens/phone_number_input_screen.dart';
 import 'main_screen.dart';
 import 'signup_screen.dart';
+import 'download_screen.dart';
+import 'dashboard_screen.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -16,7 +19,7 @@ class _LoginState extends State<Login> {
   bool _obscureText = true;
 
   void _submit() {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => MainScreen()));//skip login check
+    Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));//skip login check
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
