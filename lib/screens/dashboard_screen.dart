@@ -1,59 +1,29 @@
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  final List<String> allServices = [
-    'Cleaning', 'Plumber', 'Electrician', 'Painter', 'Carpenter', 'Gardener',
-    'AC Repair', 'Window Cleaning', 'Pest Control', 'Moving', 'Laundry',
-    'Babysitting', 'Dog Walking', 'Security', 'IT Support', 'Painting',
-  ];
-
-  final List<IconData> allIcons = [
-    Icons.cleaning_services, Icons.plumbing, Icons.electrical_services, Icons.format_paint,
-    Icons.handyman, Icons.grass, Icons.ac_unit, Icons.window, Icons.bug_report,
-    Icons.local_shipping, Icons.local_laundry_service, Icons.child_friendly,
-    Icons.pets, Icons.security, Icons.support_agent, Icons.color_lens,
-  ];
-
-  int currentPage = 0;
-  final int itemsPerPage = 6;
-
-  List<String> get currentServices {
-    int start = currentPage * itemsPerPage;
-    int end = (start + itemsPerPage).clamp(0, allServices.length);
-    return allServices.sublist(start, end);
-  }
-
-  List<IconData> get currentIcons {
-    int start = currentPage * itemsPerPage;
-    int end = (start + itemsPerPage).clamp(0, allIcons.length);
-    return allIcons.sublist(start, end);
-  }
-
-  void _nextPage() {
-    if ((currentPage + 1) * itemsPerPage < allServices.length) {
-      setState(() {
-        currentPage++;
-      });
-    }
-  }
-
-  void _previousPage() {
-    if (currentPage > 0) {
-      setState(() {
-        currentPage--;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> services = [
+      {'label': 'Cleaning', 'icon': Icons.cleaning_services},
+      {'label': 'Plumber', 'icon': Icons.plumbing},
+      {'label': 'Electrician', 'icon': Icons.electrical_services},
+      {'label': 'Painter', 'icon': Icons.format_paint},
+      {'label': 'Carpenter', 'icon': Icons.handyman},
+      {'label': 'Gardener', 'icon': Icons.grass},
+      {'label': 'AC Repair', 'icon': Icons.ac_unit},
+      {'label': 'Window Cleaning', 'icon': Icons.window},
+      {'label': 'Pest Control', 'icon': Icons.bug_report},
+      {'label': 'Moving', 'icon': Icons.local_shipping},
+      {'label': 'Laundry', 'icon': Icons.local_laundry_service},
+      {'label': 'Babysitting', 'icon': Icons.child_friendly},
+      {'label': 'Dog Walking', 'icon': Icons.pets},
+      {'label': 'Security', 'icon': Icons.security},
+      {'label': 'IT Support', 'icon': Icons.support_agent},
+      {'label': 'Painting', 'icon': Icons.color_lens},
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
@@ -72,15 +42,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: GridView.builder(
-                itemCount: currentServices.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.2,
-                ),
-                itemBuilder: (context, index) {
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.2,
+                children: services.map((service) {
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -88,38 +55,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(currentIcons[index], size: 40),
+                        Icon(service['icon'], size: 40),
                         const SizedBox(height: 10),
-                        Text(currentServices[index]),
+                        Text(service['label']),
                       ],
                     ),
                   );
-                },
+                }).toList(),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (currentPage > 0)
-                  FloatingActionButton(
-                    mini: true,
-                    onPressed: _previousPage,
-                    child: const Icon(Icons.arrow_back),
-                  )
-                else
-                  const SizedBox(width: 56), // placeholder
-
-                if ((currentPage + 1) * itemsPerPage < allServices.length)
-                  FloatingActionButton(
-                    mini: true,
-                    onPressed: _nextPage,
-                    child: const Icon(Icons.arrow_forward),
-                  )
-                else
-                  const SizedBox(width: 56), // placeholder
-              ],
-            ),
-            const SizedBox(height: 12),
           ],
         ),
       ),
